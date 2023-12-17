@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Полноэкранные слайды</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="slide" id="slide1">
+    <div class="content">
+        <h1>Привет, мой юный Друг!</h1>
+        <p>В случае если не уверен как ответить на вопрос, оставь его пустым</p>
+        <button onclick="nextSlide(2)">Далее</button>
+    </div>
+</div>
+
+<div class="slide" id="slide2">
+    <div class="content">
+        <h1>Анкета по выбору профессии</h1>
+        <p>Пожалуйста, ответьте на следующие вопросы, если не уверен в ответе, то вопрос лучше пропутить.</p>
+        
+        <h2>Какие предметы в школе нравятся больше всего?</h2>
+        <input type="text" id="question_1">
+        
+        <h2>Какие академические достижения есть? (олимпиады, победы в конкурсах)</h2>
+        <input type="text" id="question_2">
+        
+        <h2>Предпочтение работы в команде или одному?</h2>
+        <input type="text" id="question_3">
+        
+        <h2>Баланса между работой и личной жизнью?</h2>
+        <input type="text" id="question_4">
+        
+        <h2>Есть ли предпочтения относительно рабочей среды, например, офисная работа, удалённая работа, работа на открытом воздухе и т.д.?</h2>
+        <input type="text" id="question_5">
+        <br>
+        <button onclick="nextSlide(3)">Далее</button>
+    </div>
+</div>
+
+<div class="slide" id="slide3">
+    <div class="content">
+        <h1>Результат</h1>
+        <div id="profi"></div>
+        <div id="profi_desc"></div>
+        <div class="loader-wrapper">
+            <div class="loader" id="loader"></div>
+        </div>
+        <br>
+        <button onclick="nextSlide(1)">Начать заново</button>
+    </div>
+</div>
+
+
+<script src="js/utils.js"></script>
+<script src="js/script.js"></script>
+<script>
+    if (getCookie('access_token') == null) {
+        window.location.href = "/index.html";
+    } else {
+        whoami();
+    }
+</script>
+</body>
+</html>

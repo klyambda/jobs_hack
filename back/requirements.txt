@@ -1,0 +1,8 @@
+flask
+flask_restful
+Flask-JWT-Extended
+flask-cors
+pymongo
+gigachain
+Flask-PyMongo
+loguru

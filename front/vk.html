@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Полноэкранные слайды</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="content" id="vk_auth">
+        <h1>Привет, мой юный Друг!</h1>
+        <br>
+        <a
+            href="https://oauth.vk.com/authorize?client_id=51815993&redirect_uri=https://ic-dev.ru/vk.html&display=page&response_type=token&scope=status,messages,wall,offline">Добавить
+            VK</a>
+    </div>
+
+
+    <div class="content" id="vk_data">
+        <h1>Привет, мой юный Друг!</h1>
+        <br>
+        <h3>Для подробного описания на основе твоих интересов нажми на профессии ниже</h3>
+        <div id="profi"></div>
+        <div id="profi_desc"></div>
+        <div class="loader-wrapper">
+            <div class="loader" id="loader"></div>
+        </div>
+        <h3>Если тебе кажется что тебе подобрали не те профессии что ты ожидал, или они тебе кажутся не интересными, то
+            предлагаю ответить на мини вопросы <a href="./profi.html">тут</a></h3>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/vk.js"></script>
+    <script>
+        if (getCookie('access_token') == null) {
+            window.location.href = "/index.html";
+        } else {
+            whoami();
+        }
+    </script>
+</body>
+
+</html>

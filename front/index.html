@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация и Авторизация</title>
+    <style>
+        .content {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="password"] {
+            width: 20%;
+            padding: 7px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="content">
+        <button class="btn" onclick="show_login_reg(true)">Войти</button>
+        <button class="btn" onclick="show_login_reg(false)">Регистрация</button>
+    </div>
+    <div class="content">
+        <!-- Форма регистрации -->
+        <div id="registrationForm">
+            <h2>Регистрация</h2>
+            <div class="form-group">
+                <label for="phone">Телефон</label>
+                <input type="tel" id="phone" name="phone" pattern="7[0-9]{10}" maxlength="11" placeholder="+7XXXXXXXXXX"
+                    required onkeypress="return restrictInput(event)">
+            </div>
+            <div class="form-group">
+                <label for="name">Имя</label>
+                <input type="text" id="name">
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password">
+            </div>
+            <label for="password"><input type="checkbox" id="pers_sold"> Согласие на обработку <a href="src/152.pdf" target="_blank"
+                    rel="noopener noreferrer">персональных данных</a></label>
+                    <br>
+            <button class="btn" onclick="register()">Регистрация</button>
+        </div>
+
+    </div>
+    <div class="content">
+        <!-- Форма авторизации -->
+        <div id="loginForm">
+            <h2>Авторизация</h2>
+            <div class="form-group">
+                <label for="loginPhone">Телефон</label>
+                <input type="tel" id="loginPhone" name="phone" pattern="7[0-9]{10}" maxlength="11"
+                    placeholder="+7XXXXXXXXXX" required onkeypress="return restrictInput(event)">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Пароль</label>
+                <input type="password" id="loginPassword">
+            </div>
+            <button class="btn" onclick="login()">Войти</button>
+        </div>
+
+
+    </div>
+    <script src="js/utils.js"></script>
+    <script>
+        function restrictInput(event) {
+            var allowedChars = '0123456789';
+            var char = String.fromCharCode(event.which);
+            if (allowedChars.indexOf(char) !== -1) {
+                return true;
+            }
+            return false;
+        }
+
+        if (getCookie('access_token') == null) {
+            
+        } else {
+            whoami();
+        }
+
+        function removeNonDigits(str) {
+            return str.replace(/\D/g, '');
+        }
+        // Ссылки на методы
+        const registrationUrl = 'your_registration_endpoint'; // Замените на ваш URL
+        const loginUrl = 'your_login_endpoint'; // Замените на ваш URL
+
+        // Функция регистрации
+        function register() {
+            if (document.getElementById("pers_sold").checked == false){
+                alert("Примите согласие на обработку перс данных");
+                return 0;
+            }
+            const phone = document.getElementById('phone').value;
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+            // Здесь код для отправки данных на registrationUrl
+            console.log('Регистрация', phone, name, password);
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            let valid_phone = removeNonDigits(phone);
+            if (valid_phone.length != 11){
+                alert("Формат телефона не стандарта РФ 7XXXXXXXXXX (11 цифр вкл 7)");
+                return 0 
+            }
+            if (password.length <= 6){
+                alert("Пароль должен быть больше 6 символов");
+                return 0 
+            }
+            var data = JSON.stringify({
+                "phone": valid_phone,
+                "password": password,
+                "name": name
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    if (this.status === 201) {
+                        alert("Успех, можете авторизоваться в систему")
+                        console.log(this.responseText);
+                    } else {
+                        let data = JSON.parse(this.responseText);
+                        alert(data["msg"]);
+                        console.error('Ошибка запроса: ' + xhr.status);
+                    }
+                }
+            });
+
+            xhr.open("POST", "/api/register");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.send(data);
+        }
+
+        // Функция авторизации
+        function login() {
+            const loginPhone = document.getElementById('loginPhone').value;
+            const loginPassword = document.getElementById('loginPassword').value;
+            // Здесь код для отправки данных на loginUrl
+            console.log('Авторизация', loginPhone, loginPassword);
+            // WARNING: For POST requests, body is set to null by browsers.
+            var data = JSON.stringify({
+                "phone": removeNonDigits(loginPhone),
+                "password": loginPassword
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        console.log(this.responseText);
+                        let data = JSON.parse(this.responseText);
+                        setCookie("access_token", data["access_token"], 14);
+                        window.location.href = "/vk.html?get_vk=1";
+                    } else {
+                        let data = JSON.parse(this.responseText);
+                        alert("Не верные данные авторизации");
+                        console.error('Ошибка запроса: ' + xhr.status);
+                    }
+                }
+            });
+
+            xhr.open("POST", "/api/login");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.send(data);
+        }
+
+
+        function show_login_reg(login) {
+            if (login == true) {
+                document.getElementById("registrationForm").style.display = 'none';
+                document.getElementById("loginForm").style.display = 'block';
+            } else {
+                document.getElementById("registrationForm").style.display = 'block';
+                document.getElementById("loginForm").style.display = 'none';
+            }
+        }
+
+        document.getElementById("registrationForm").style.display = 'none';
+        document.getElementById("loginForm").style.display = 'none';
+
+    </script>
+
+</body>
+
+</html>
