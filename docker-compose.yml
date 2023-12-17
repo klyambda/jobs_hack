@@ -45,12 +45,12 @@ services:
       - ./front:/var/www/front
       - ./data/certs:/etc/letsencrypt
 
-  certbot:
-    image: certbot/certbot
-    depends_on:
-      - nginx_auth
-    volumes:
-      - ./front:/var/www/front
-      - ./data/certs:/etc/letsencrypt
-    command: certonly --webroot --webroot-path=/var/www/front --email shaman070798@rambler.ru --agree-tos --no-eff-email -d ic-dev.ru
-    restart: unless-stopped
+  # certbot:
+  #   image: certbot/certbot
+  #   depends_on:
+  #     - nginx_auth
+  #   volumes:
+  #     - ./front:/var/www/front
+  #     - ./data/certs:/etc/letsencrypt
+  #   command: certonly --webroot --webroot-path=/var/www/front --email shaman070798@rambler.ru --agree-tos --no-eff-email -d ic-dev.ru
+  #   restart: unless-stopped
