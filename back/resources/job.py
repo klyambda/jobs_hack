@@ -50,4 +50,4 @@ class Job(Resource):
         job_info = get_job_info(job)
         job_info["gigachat"] = gigachat_answer
 
-        return job_info
+        return job_info, 200
