@@ -38,7 +38,7 @@ class VK(Resource):
                 )
             ],
             temperature=0.9,
-            max_tokens=256,
+            max_tokens=1024,
         )
         for el in vk_interests:
             payload.messages.append(Messages(role=MessagesRole.USER, content=el))
