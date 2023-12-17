@@ -34,8 +34,12 @@ if (data.get_vk == "1"){
     console.log(data.get_vk);
     document.getElementById("vk_auth").style.visibility = 'visible';
     document.getElementById("vk_data").style.visibility = 'hidden';
-} else {
+} else if (window.location.href.includes("access_token")) {
     vk_auth();
     document.getElementById("vk_auth").style.visibility = 'hidden';
     document.getElementById("vk_data").style.visibility = 'visible';
+} else {
+    console.log(data.get_vk);
+    document.getElementById("vk_auth").style.visibility = 'visible';
+    document.getElementById("vk_data").style.visibility = 'hidden';
 }
