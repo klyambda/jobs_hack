@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from extensions import mongo
 from config import recommendations_prompt, SBER_TOKEN
-from utils import parse_vk_url, parse_vk_person, get_jobs
+from utils import parse_vk_url, parse_vk_person, parse_answer
 
 
 class VK(Resource):
@@ -46,4 +46,4 @@ class VK(Resource):
         with GigaChat(credentials=SBER_TOKEN, verify_ssl_certs=False) as giga:
             response = giga.chat(payload)
 
-        return {"jobs": get_jobs(response.choices[0].message.content)}, 200
+        return {"jobs": parse_answer(response.choices[0].message.content)}, 200
