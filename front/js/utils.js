@@ -49,7 +49,7 @@ function get_profession(profession) {
     remove_target_profi();
     set_target_profi(profession);
     if (profession in data_profession) {
-        document.getElementById("profi_desc").innerHTML = `<p>${data_profession[profession]}</p>`;
+        document.getElementById("profi_desc").innerHTML = data_profession[profession];
         return 0
     }
     on_loader();
@@ -65,8 +65,8 @@ function get_profession(profession) {
             if (this.status === 200) {
                 console.log(this.responseText);
                 let data = JSON.parse(this.responseText);
-                data_profession[profession] = data.gigachat;
-                document.getElementById("profi_desc").innerHTML = `<p>${data.gigachat}</p>`;
+                data_profession[profession] = `<h3>Вакансий на hh.ru за последние 30 дней ${data.hh_count} со средней зп ${data.hh_salary}</h3><p>${data.gigachat}</p>`;
+                document.getElementById("profi_desc").innerHTML = data_profession[profession];
                 off_loader();
             } else {
                 console.log(this.responseText);
