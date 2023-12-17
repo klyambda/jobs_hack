@@ -40,8 +40,8 @@ class Job(Resource):
         for el in user["vk_info"]:
             payload.messages.append(Messages(role=MessagesRole.USER, content=el))
 
-        for el in user["messages"]:
-            payload.messages.append(Messages(role=MessagesRole.USER, content=el))
+        # for el in user["messages"]:
+        #     payload.messages.append(Messages(role=MessagesRole.USER, content=el))
 
         with GigaChat(credentials=SBER_TOKEN, verify_ssl_certs=False) as giga:
             response = giga.chat(payload)
