@@ -26,7 +26,7 @@ class GigaChatAPI(Resource):
                 )
             ],
             temperature=0.9,
-            max_tokens=256,
+            max_tokens=1024,
         )
         for el in user["vk_info"]:
             payload.messages.append(Messages(role=MessagesRole.USER, content=el))
