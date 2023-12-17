@@ -7,7 +7,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from extensions import mongo
 
 from config import SBER_TOKEN
-from utils.hh import get_job_info
+from src.hh import get_job_info
 
 
 class Job(Resource):
