@@ -122,4 +122,7 @@ def get_job_info(job):
         except Exception:
             continue
 
-    return {"hh_salary": round(salary_sum / salary_count), "hh_count": count}
+    salary_avg = 0.0
+    if salary_count:
+        salary_avg = round(salary_sum / salary_count)
+    return {"hh_salary": salary_avg, "hh_count": count}
