@@ -7,6 +7,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from extensions import mongo
 
 from config import SBER_TOKEN
+from utils.hh import get_job_info
 
 
 class Job(Resource):
@@ -44,4 +45,9 @@ class Job(Resource):
 
         with GigaChat(credentials=SBER_TOKEN, verify_ssl_certs=False) as giga:
             response = giga.chat(payload)
-            return {"gigachat": response.choices[0].message.content.replace("\n", "<br>")}, 200
+            gigachat_answer = response.choices[0].message.content.replace("\n", "<br>")
+
+        job_info = get_job_info(job)
+        job_info["gigachat"] = gigachat_answer
+
+        return job_info

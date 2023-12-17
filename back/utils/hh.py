@@ -101,11 +101,25 @@ def init_areas():
 rates = get_rates()
 areas, russian_areas = init_areas()
 vacancy_search_order = get_vacancy_search_order()
+region = 1
+last_day = 30
 
-if __name__ == "__main__":
-    # MSK
-    redion = 1
-    last_day = 30
-    data, count = get_page("Системный администратор", redion, last_day)
-    print(data[0])
-    print(count)
+
+def get_job_info(job):
+    data, count = get_page(job, region, last_day)
+
+    salary_sum = 0.0
+    salary_count = 0
+    for elem in data:
+        if "salary" not in elem:
+            continue
+        if not elem["salary"]:
+            continue
+        salary = elem["salary"]["from"] or elem["salary"]["to"]
+        try:
+            salary_sum += salary * rates[elem["salary"]["currency"]]
+            salary_count += 1
+        except Exception:
+            continue
+
+    return {"hh_salary": round(salary_sum / salary_count), "hh_count": count}
